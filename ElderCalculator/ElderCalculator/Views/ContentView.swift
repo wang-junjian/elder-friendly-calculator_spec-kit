@@ -2,30 +2,35 @@ import AppKit
 import SwiftUI
 
 /// 根布局（UI 契约 U1/U5）：显示区在上、键盘区在下单屏布局；
-/// 按钮随窗口放大，但不小于适老底线
+/// T027：GeometryReader 按窗口尺寸缩放按钮与字号，但不小于适老底线
 struct ContentView: View {
     @StateObject private var engine = CalculatorEngine()
     @AppStorage("isSpeechEnabled") private var isSpeechEnabled = false
     @State private var speech = SpeechService(synthesizer: AVSpeechSynthesizerAdapter())
 
     var body: some View {
-        VStack(spacing: 0) {
-            // U3：语音开关位于界面可见位置，状态即时可见（FR-012）
-            HStack {
-                Spacer()
-                Toggle(String(localized: "speech.toggle.label"), isOn: $isSpeechEnabled)
-                    .toggleStyle(.switch)
-                    .font(.system(size: 20))
-                    .foregroundStyle(AccessibilityMetrics.displayForeground)
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 8)
-                    .accessibilityIdentifier("speech.toggle")
-            }
-            .background(AccessibilityMetrics.displayBackground)
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                // U3：语音开关位于界面可见位置，状态即时可见（FR-012）
+                HStack {
+                    Spacer()
+                    Toggle(String(localized: "speech.toggle.label"), isOn: $isSpeechEnabled)
+                        .toggleStyle(.switch)
+                        .font(.system(size: AccessibilityMetrics.toggleFontSize))
+                        .foregroundStyle(AccessibilityMetrics.displayForeground)
+                        .padding(.horizontal, AccessibilityMetrics.horizontalPadding)
+                        .padding(.vertical, AccessibilityMetrics.verticalPadding)
+                        .accessibilityIdentifier("speech.toggle")
+                }
+                .background(AccessibilityMetrics.displayBackground)
 
-            DisplayView(display: engine.display)
-            KeypadView(onKey: engine.send)
-                .layoutPriority(1)
+                DisplayView(display: engine.display,
+                            fontSize: AccessibilityMetrics.scaledDisplayFontSize(for: geometry.size))
+                KeypadView(onKey: engine.send,
+                           buttonHeight: AccessibilityMetrics.scaledButtonHeight(for: geometry.size),
+                           buttonFontSize: AccessibilityMetrics.scaledButtonFontSize(for: geometry.size))
+                    .layoutPriority(1)
+            }
         }
         .frame(minWidth: AccessibilityMetrics.windowMinimumSize.width,
                minHeight: AccessibilityMetrics.windowMinimumSize.height)

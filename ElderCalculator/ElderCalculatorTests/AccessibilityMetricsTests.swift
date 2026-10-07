@@ -52,4 +52,43 @@ final class AccessibilityMetricsTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(AccessibilityMetrics.windowDefaultSize.height,
             AccessibilityMetrics.windowMinimumSize.height)
     }
+
+    // MARK: - Convergence（Phase 7）
+
+    // T027/U5：窗口放大时按钮与字号按比例增大；最小窗口处缩放因子为 1，向下钳制不小于 1
+    func testWindowScalingFactor() {
+        XCTAssertEqual(AccessibilityMetrics.scaleFactor(for: AccessibilityMetrics.windowMinimumSize),
+            1.0, accuracy: 0.001, "最小窗口处缩放因子必须为 1（底线尺寸）")
+        let doubled = CGSize(width: 960, height: 1280)
+        XCTAssertEqual(AccessibilityMetrics.scaleFactor(for: doubled),
+            2.0, accuracy: 0.001, "窗口翻倍时缩放因子应为 2")
+        let smaller = CGSize(width: 320, height: 480)
+        XCTAssertEqual(AccessibilityMetrics.scaleFactor(for: smaller),
+            1.0, accuracy: 0.001, "小于最小窗口时须钳制为 1，不得低于适老底线")
+    }
+
+    // T027/U5：任意窗口尺寸下缩放值不低于默认基线
+    func testScaledMetricsNeverBelowBaseline() {
+        let sizes = [AccessibilityMetrics.windowMinimumSize,
+                     AccessibilityMetrics.windowDefaultSize,
+                     CGSize(width: 1920, height: 2560)]
+        for size in sizes {
+            XCTAssertGreaterThanOrEqual(AccessibilityMetrics.scaledButtonHeight(for: size),
+                AccessibilityMetrics.buttonDefaultSize)
+            XCTAssertGreaterThanOrEqual(AccessibilityMetrics.scaledButtonFontSize(for: size),
+                AccessibilityMetrics.buttonFontSize)
+            XCTAssertGreaterThanOrEqual(AccessibilityMetrics.scaledDisplayFontSize(for: size),
+                AccessibilityMetrics.displayFontSizeDefault)
+        }
+    }
+
+    // T029：迁移后的布局常量满足适老可读底线（消除魔法数字后仍受测试约束）
+    func testLayoutConstantsMeetBaseline() {
+        XCTAssertGreaterThanOrEqual(AccessibilityMetrics.displayAreaMinHeight,
+            AccessibilityMetrics.displayFontSizeDefault, "显示区高度须容纳默认结果字号")
+        XCTAssertGreaterThanOrEqual(AccessibilityMetrics.toggleFontSize, 17,
+            "语音开关字号须不低于系统正文可读底线")
+        XCTAssertGreaterThanOrEqual(AccessibilityMetrics.hintFontSize, 17,
+            "提示文案字号须不低于系统正文可读底线")
+    }
 }

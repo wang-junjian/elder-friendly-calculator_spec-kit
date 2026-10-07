@@ -16,6 +16,7 @@ final class CalculatorEngine: ObservableObject {
     private var showingResult = false          // 是否刚得出结果
     private var error: CalculationError?       // 当前错误（FR-007，C5/C10）
     private var equationSpeech = ""            // 最近一次算式的口语句（C12）
+    private var limitHintPending = false       // T028：超限数字刚被忽略，下一次发布置提示标志
 
     /// FR-010：单操作数数字部分上限（C8）
     private static let maxInputDigits = 12
@@ -69,7 +70,10 @@ final class CalculatorEngine: ObservableObject {
             currentInput = String(d)           // 前导零替换（"0" 后按 5 → "5"）
             return
         }
-        guard currentInput.filter(\.isNumber).count < Self.maxInputDigits else { return } // C8
+        guard currentInput.filter(\.isNumber).count < Self.maxInputDigits else {
+            limitHintPending = true              // T028：超限忽略须给出可感知提示
+            return
+        } // C8
         currentInput.append(String(d))
     }
 
@@ -165,6 +169,9 @@ final class CalculatorEngine: ObservableObject {
     // MARK: - 显示
 
     private func publish() {
+        // T028：提示标志仅跟随本次发布，消费后复位
+        let limitHint = limitHintPending
+        limitHintPending = false
         if let error {
             let message: String
             switch error {
@@ -173,11 +180,13 @@ final class CalculatorEngine: ObservableObject {
             case .overflow:
                 message = String(localized: "error.overflow", defaultValue: "数字太大了")
             }
-            display = DisplayState(text: message, isError: true, speechText: message)
+            display = DisplayState(text: message, isError: true, speechText: message,
+                                   inputLimitReached: limitHint)
         } else {
             // C12：结果状态播报完整算式；输入过程播报当前数字的口语形式
             let speech = showingResult ? equationSpeech : Self.spoken(currentInput)
-            display = DisplayState(text: currentInput, isError: false, speechText: speech)
+            display = DisplayState(text: currentInput, isError: false, speechText: speech,
+                                   inputLimitReached: limitHint)
         }
     }
 

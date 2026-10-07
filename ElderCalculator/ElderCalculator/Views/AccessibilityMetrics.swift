@@ -20,6 +20,31 @@ enum AccessibilityMetrics {
     static let windowDefaultSize = CGSize(width: 560, height: 760)
     static let windowMinimumSize = CGSize(width: 480, height: 640)
 
+    // MARK: 布局常量（T029：UI 层禁止散落魔法数字）
+    static let displayAreaMinHeight: CGFloat = 96
+    static let toggleFontSize: CGFloat = 20
+    static let hintFontSize: CGFloat = 20
+    static let horizontalPadding: CGFloat = 24
+    static let verticalPadding: CGFloat = 8
+
+    // MARK: 窗口缩放（U5：窗口放大时按钮与字号按比例增大，缩小时不小于底线）
+    static func scaleFactor(for size: CGSize) -> CGFloat {
+        max(1, min(size.width / windowMinimumSize.width,
+                   size.height / windowMinimumSize.height))
+    }
+
+    static func scaledButtonHeight(for size: CGSize) -> CGFloat {
+        buttonDefaultSize * scaleFactor(for: size)
+    }
+
+    static func scaledButtonFontSize(for size: CGSize) -> CGFloat {
+        buttonFontSize * scaleFactor(for: size)
+    }
+
+    static func scaledDisplayFontSize(for size: CGSize) -> CGFloat {
+        displayFontSizeDefault * scaleFactor(for: size)
+    }
+
     // MARK: 配色（U8：对比度 ≥4.5:1，实现取更高）
     static let displayForegroundNS = NSColor.white
     static let displayBackgroundNS = NSColor.black

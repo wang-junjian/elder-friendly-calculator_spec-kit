@@ -159,6 +159,19 @@ final class CalculatorEngineTests: XCTestCase {
         XCTAssertEqual(engine.display.text, "数字太大了")
     }
 
+    // MARK: - Convergence（Phase 7）
+
+    // T028：达 12 位上限后给出可感知提示（spec Edge Case：轻微提示，不得静默忽略）
+    func testInputLimitHint() {
+        for _ in 0..<12 { send(.digit(9)) }
+        XCTAssertFalse(engine.display.inputLimitReached, "未超限时不得提示")
+        send(.digit(9))  // 第 13 位被忽略
+        XCTAssertTrue(engine.display.inputLimitReached, "超限输入被忽略时必须置提示标志")
+        XCTAssertEqual(engine.display.text, "999999999999")
+        send(.backspace)
+        XCTAssertFalse(engine.display.inputLimitReached, "恢复有效操作后提示标志须复位")
+    }
+
     // C13：任意事件序列不崩溃；display.text 永不为空、永不包含英文/Inf/NaN（SC-005）
     func testRandomEventSequencesNeverCrash() {
         let allEvents: [KeyEvent] = (0...9).map { .digit($0) } + [

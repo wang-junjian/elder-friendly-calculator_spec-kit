@@ -135,9 +135,9 @@ NON-NEGOTIABLE。每个用户故事的测试任务 MUST 先于实现任务执行
 
 **Purpose**: 收敛核查发现的剩余差距（规格/计划/契约 vs 当前代码）
 
-- [ ] T027 实现窗口放大时按钮尺寸与字号按比例缩放（U5）：引入 GeometryReader 按窗口尺寸缩放 KeypadView 按钮高度与 DisplayView/按钮字号，缩小时不低于 AccessibilityMetrics 底线（24pt/64pt），窗口最小时布局不退化 per U5（partial）
-- [ ] T028 在单操作数输入达到 12 位上限时给出轻微视觉提示（如显示区短暂高亮；尊重「减弱动态效果」设置），当前超限输入仅静默忽略 per spec Edge Case（超长输入）（partial）
-- [ ] T029 清除残留魔法数字并迁移至 AccessibilityMetrics：DisplayView.swift 硬编码 `minHeight: 96`、ContentView.swift 硬编码字号 20 与 padding 24/8，使 T026「无魔法数字」声明真正成立 per T007（contradicts）
+- [X] T027 实现窗口放大时按钮尺寸与字号按比例缩放（U5）：引入 GeometryReader 按窗口尺寸缩放 KeypadView 按钮高度与 DisplayView/按钮字号，缩小时不低于 AccessibilityMetrics 底线（24pt/64pt），窗口最小时布局不退化 per U5（partial）
+- [X] T028 在单操作数输入达到 12 位上限时给出轻微视觉提示（如显示区短暂高亮；尊重「减弱动态效果」设置），当前超限输入仅静默忽略 per spec Edge Case（超长输入）（partial）
+- [X] T029 清除残留魔法数字并迁移至 AccessibilityMetrics：DisplayView.swift 硬编码 `minHeight: 96`、ContentView.swift 硬编码字号 20 与 padding 24/8，使 T026「无魔法数字」声明真正成立 per T007（contradicts）
 
 ---
 

@@ -26,4 +26,6 @@ struct DisplayState: Equatable {
     var text: String
     var isError: Bool
     var speechText: String
+    /// T028：输入达 12 位上限后数字被忽略时为 true（spec Edge Case：轻微提示）
+    var inputLimitReached: Bool = false
 }

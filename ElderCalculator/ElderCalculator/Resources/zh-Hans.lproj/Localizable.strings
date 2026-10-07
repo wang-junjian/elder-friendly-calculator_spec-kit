@@ -2,6 +2,9 @@
 "error.divisionByZero" = "不能除以 0";
 "error.overflow" = "数字太大了";
 
+/* 输入上限提示（T028，spec Edge Case：轻微提示） */
+"hint.inputLimit" = "最多可输入 12 位数字";
+
 /* 按钮标签（FR-006） */
 "button.backspace" = "退格";
 "button.clear" = "清除";

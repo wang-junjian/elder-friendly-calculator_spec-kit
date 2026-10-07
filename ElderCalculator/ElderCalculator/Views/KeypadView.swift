@@ -1,8 +1,11 @@
 import SwiftUI
 
 /// 键盘网格（UI 契约 U2/U7/U9；research R3：keyboardShortcut 方案兼容 macOS 13）
+/// T027：按钮高度与字号由 ContentView 按窗口尺寸缩放传入（U5）
 struct KeypadView: View {
     let onKey: (KeyEvent) -> Void
+    let buttonHeight: CGFloat
+    let buttonFontSize: CGFloat
 
     // U12：尊重系统「减弱动态效果」「增大对比度」设置
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -50,10 +53,10 @@ struct KeypadView: View {
                     onKey(button.event)
                 } label: {
                     Text(button.title)
-                        .font(.system(size: AccessibilityMetrics.buttonFontSize, weight: .semibold))
+                        .font(.system(size: buttonFontSize, weight: .semibold))
                         .foregroundStyle(AccessibilityMetrics.buttonForeground)
                         .frame(maxWidth: .infinity)
-                        .frame(minHeight: AccessibilityMetrics.buttonDefaultSize)
+                        .frame(minHeight: buttonHeight)
                         .background(button.isOperator
                             ? AccessibilityMetrics.operatorBackground
                             : AccessibilityMetrics.buttonBackground)
