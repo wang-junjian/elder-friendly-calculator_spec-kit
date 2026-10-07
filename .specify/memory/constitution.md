@@ -1,50 +1,108 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+- Version change: 0.0.0（模板占位）→ 1.0.0
+- Modified principles: 无（初次制定，五条原则均为新增）
+  - [PRINCIPLE_1_NAME] → I. 适老性优先（NON-NEGOTIABLE）
+  - [PRINCIPLE_2_NAME] → II. 简洁至上
+  - [PRINCIPLE_3_NAME] → III. 测试先行（NON-NEGOTIABLE）
+  - [PRINCIPLE_4_NAME] → IV. 防错设计与清晰反馈
+  - [PRINCIPLE_5_NAME] → V. 可访问性合规
+- Added sections: 核心原则（5 条）、附加约束、开发工作流、治理
+- Removed sections: 无
+- Follow-up TODOs: 无（所有占位符均已填充）
+-->
 
-## Core Principles
+# 适老友好计算器（Elder-Friendly Calculator）章程
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+## 核心原则
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### I. 适老性优先（NON-NEGOTIABLE）
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+一切设计与实现决策 MUST 以老年用户（约 60 岁及以上）的实际可用性为第一优先级：
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+- 字体 MUST 足够大（默认显示字号不小于 24px 等效尺寸），并支持无级放大；
+- 界面元素 MUST 满足高对比度要求（正文对比度不低于 4.5:1，大字号元素不低于 3:1）；
+- 可点击/可触摸目标 MUST 足够大（不小于 44×44 pt/px），且彼此留有防误触间距；
+- 不允许为了视觉美观、动画炫技或功能堆砌而牺牲上述任何一条。
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+理由：目标用户群体在视力、精细动作控制与认知负荷承受方面存在普遍且可预期的退化，
+任何与适老性冲突的“锦上添花”都是对核心用户的排斥。
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### II. 简洁至上
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+产品 MUST 只保留老年用户高频必需的计算功能（加、减、乘、除及清除/回退）：
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+- 禁止无明确老年用户场景支撑的功能（科学计算、括号表达式、历史记录云同步等默认不做）；
+- 界面 MUST 单屏完成全部核心操作，禁止隐藏菜单、手势暗门和多级导航；
+- 任何新增复杂度 MUST 在规格说明（spec）中给出面向目标用户的正当理由，否则不予实现。
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+理由：遵循 YAGNI；每多一个按钮、多一层界面，都是在增加老年用户的认知负荷与误操作概率。
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+### III. 测试先行（NON-NEGOTIABLE）
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+严格执行测试驱动开发（TDD）：
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+- 测试用例 MUST 先于实现代码编写，经评审确认后观察到失败（Red），方可编写实现（Green），
+  随后进行重构（Refactor）；
+- 每个用户故事 MUST 有可独立验证的验收测试，且验收标准直接来源于规格说明；
+- 计算逻辑（精度、边界值、除零等）MUST 有单元测试覆盖，覆盖率不允许因新提交而下降。
+
+理由：计算器属于“结果必须永远正确”的工具型应用，错误结果对老年用户的伤害
+（财务、用药剂量等场景）远大于一般应用，必须以测试作为正确性的第一道防线。
+
+### IV. 防错设计与清晰反馈
+
+系统 MUST 主动预防误操作，并对每一次操作给出即时、明确的反馈：
+
+- 输入非法操作（如除以零、连续输入运算符）MUST 被拦截或纠正，禁止崩溃、卡死或
+  显示技术性错误码；
+- 错误提示 MUST 使用通俗口语（如“不能除以零”），禁止出现堆栈信息、异常名或英文术语；
+- 每次按键与运算结果 MUST 有清晰的视觉反馈（如按钮态变化、结果高亮），可选提供
+  语音播报；
+- 破坏性操作（如清空全部输入）MUST 可通过明确的单一动作完成，且结果立即可见。
+
+理由：老年用户对“不确定是否操作成功”的焦虑远高于年轻用户，即时反馈与防错设计
+直接决定产品是否被信任和持续使用。
+
+### V. 可访问性合规
+
+实现 MUST 遵循可访问性标准并可被辅助技术使用：
+
+- 界面 MUST 满足 WCAG 2.1 AA 级要求中与文本、对比度、焦点可见性相关的条款；
+- 所有交互元素 MUST 具有可被屏幕阅读器朗读的无障碍标签；
+- 功能 MUST 支持仅键盘（或等效单键操作设备）完成，禁止依赖双击、长按、拖拽等
+  复杂手势作为唯一操作路径。
+
+理由：可访问性不是可选增强项，而是面向老年与视障用户的基础契约；遵循公认标准
+可避免凭主观感觉做适老化设计。
+
+## 附加约束
+
+- **技术选型**：优先选用无障碍支持成熟、包体积小的技术栈；任何第三方依赖引入 MUST
+  评估其可访问性表现与维护活跃度。
+- **性能标准**：冷启动至可交互 MUST 在低端设备上不超过 2 秒；按键到视觉反馈的延迟
+  MUST 小于 100 毫秒。
+- **隐私与数据**：默认不收集任何用户数据；如未来引入历史记录功能，MUST 仅本地存储
+  且可一键清除，禁止要求注册或联网。
+- **平台一致性**：同一版本在各目标平台上的计算结果 MUST 完全一致（统一精度与舍入规则）。
+
+## 开发工作流
+
+- 所有功能 MUST 遵循 Spec Kit 流程：规格说明（specify）→ 计划（plan）→ 任务（tasks）→
+  实现（implement），禁止跳过规格直接编码。
+- 每个 Pull Request MUST 通过：全部自动化测试、适老性自查清单（字号/对比度/触摸目标/
+  错误提示用语）、以及至少一名评审者的代码评审。
+- 涉及界面变更的提交 MUST 附带真实字号与对比度下的截图或录屏，供评审核对原则 I 与 V。
+- 任何对本章程原则的偏离 MUST 在 PR 描述中显式声明并获得批准，否则视为不合规。
+
+## 治理
+
+- 本章程优先级高于项目内所有其他开发惯例与临时约定；发生冲突时以本章程为准。
+- 修订程序：任何修正案 MUST 以书面形式提出（说明变更内容与理由），经项目维护者评审
+  批准后合入，并同步更新 Sync Impact Report。
+- 版本策略：遵循语义化版本——原则删除或重新定义（不兼容变更）升 MAJOR；新增原则或
+  章节实质性扩充升 MINOR；措辞澄清、勘误等非语义修改升 PATCH。
+- 合规审查：每次发布前 MUST 对照本章程五条原则逐项核查；评审者在每次 PR 评审中
+  MUST 验证章程合规性，复杂度增加 MUST 有书面理由。
+
+**Version**: 1.0.0 | **Ratified**: 2026-10-07 | **Last Amended**: 2026-10-07
