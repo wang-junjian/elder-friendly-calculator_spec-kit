@@ -1,0 +1,37 @@
+/* 错误提示（FR-007，章程原则 IV：通俗口语，禁止技术术语） */
+"error.divisionByZero" = "不能除以 0";
+"error.overflow" = "数字太大了";
+
+/* 按钮标签（FR-006） */
+"button.backspace" = "退格";
+"button.clear" = "清除";
+
+/* 语音开关（FR-012） */
+"speech.toggle.label" = "语音播报";
+
+/* 无障碍标签与提示（章程原则 V，U10） */
+"a11y.digit.label" = "数字 %lld";
+"a11y.digit.hint" = "双击输入 %lld";
+"a11y.decimal.label" = "小数点";
+"a11y.decimal.hint" = "双击输入小数点";
+"a11y.add.label" = "加号";
+"a11y.subtract.label" = "减号";
+"a11y.multiply.label" = "乘号";
+"a11y.divide.label" = "除号";
+"a11y.operator.hint" = "双击选择运算符";
+"a11y.equals.label" = "等于";
+"a11y.equals.hint" = "双击计算结果";
+"a11y.backspace.label" = "退格";
+"a11y.backspace.hint" = "双击删除最后一位";
+"a11y.clear.label" = "清除";
+"a11y.clear.hint" = "双击清空全部输入";
+"a11y.display.label" = "结果显示区";
+
+/* 语音播报用词（FR-012，C12） */
+"speech.add" = "加";
+"speech.subtract" = "减";
+"speech.multiply" = "乘";
+"speech.divide" = "除";
+"speech.equals" = "等于";
+"speech.point" = "点";
+"speech.negative" = "负";
